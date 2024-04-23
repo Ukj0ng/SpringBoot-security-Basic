@@ -29,7 +29,10 @@ public class SecurityConfig{
                 .anyRequest().permitAll()       // 그 외의 모든 요청은 누구나 접근 가능
             )
             .formLogin(form -> form     // formLogin이 활성화되면, 권한이 필요한 페이지에 인증되지 않은 상태로 접근하면
-                .loginPage("/loginForm"));  // 이 loginPage로 리디렉션함
+                .loginPage("/loginForm")    // 이 loginPage로 리디렉션함
+                .loginProcessingUrl("/login")   // /login 주소가 호출되면 시큐리티가 낚아채서 대신 로그인을 진행해줌
+                .defaultSuccessUrl("/")
+            );
 
         return http.build();
     }
