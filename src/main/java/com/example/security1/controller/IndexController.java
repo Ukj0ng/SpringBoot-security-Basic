@@ -1,12 +1,18 @@
 package com.example.security1.controller;
 
+import com.example.security1.model.User;
+import com.example.security1.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller // View를 리턴하겠다
 public class IndexController {
 
+    @Autowired
+    private UserService userService;
     // localhost:8080/
     // localhost:8080
     @GetMapping({"", "/"})
@@ -33,18 +39,20 @@ public class IndexController {
 
     // spring-security가 login을 가로챔
     // but SecurityConfig파일을 만들고 나니 작동을 안함
-    @GetMapping("/login")
-    public String login() {
-        return "login";
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "loginForm";
     }
 
-    @GetMapping("/join")
-    public String join() {
-        return "join";
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "joinForm";
     }
 
-    @GetMapping("/joinProc")
-    public @ResponseBody String joinProc() {
-        return "회원가입 완료됨!";
+    @PostMapping("/join")
+    public String join(User user) {
+        System.out.println(user);
+        userService.회원가입(user);
+        return "redirect:/loginForm";
     }
 }
