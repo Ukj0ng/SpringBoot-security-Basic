@@ -3,6 +3,8 @@ package com.example.security1.controller;
 import com.example.security1.model.User;
 import com.example.security1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +56,17 @@ public class IndexController {
         System.out.println(user);
         userService.회원가입(user);
         return "redirect:/loginForm";
+    }
+
+    @Secured("ROLE_ADMIN") // 이런건 보통 메서드 하나에만 적용하고 싶을 때 쓰고, 많으면 filterchain가서 쓰면됨.
+    @GetMapping("/info")
+    public @ResponseBody String info() {
+        return "개인정보";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')") // data 함수가 실행되기 직전에 실행
+    @GetMapping("/data")
+    public @ResponseBody String data() {
+        return "데이터정보";
     }
 }
