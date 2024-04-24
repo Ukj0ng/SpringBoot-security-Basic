@@ -34,8 +34,10 @@ public class SecurityConfig{
                 .loginPage("/loginForm")    // 이 loginPage로 리디렉션함
                 .loginProcessingUrl("/login")   // /login 주소가 호출되면 시큐리티가 낚아채서 대신 로그인을 진행해줌
                 .defaultSuccessUrl("/")
+            )
+            .oauth2Login(oauth -> oauth
+                .loginPage("/loginForm")
             );
-
         return http.build();
     }
 }
