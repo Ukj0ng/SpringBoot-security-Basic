@@ -2,6 +2,7 @@ package com.example.security1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity // spring-security filter(여기서는 SecurityConfig)가 spring filter chain에 등록됨
+@EnableMethodSecurity (securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화, preAuthorize, postAuthorize 활성화
 public class SecurityConfig{
 
     // Bean을 붙히면 해당 메서드의 리턴되는 오브젝트를 IoC에 등록해준다.
