@@ -1,10 +1,15 @@
 package com.example.security1.controller;
 
+import com.example.security1.auth.PrincipalDetail;
 import com.example.security1.model.User;
 import com.example.security1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +20,28 @@ public class IndexController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/test/oauth/login")
+    public @ResponseBody String testOAuthLogin (
+        Authentication authentication, // DI(의존성 주입)
+        @AuthenticationPrincipal OAuth2User oAuth2) {
+        System.out.println("/test/oauth/login ==========");
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        System.out.println("authentication: " + oAuth2User.getAttributes());
+        System.out.println("oAuth2: " + oAuth2.getAttributes());
+        return "OAuth 세션 정보 확인하기";
+    }
+
+    @GetMapping("/test/login")
+    public @ResponseBody String testLogin(
+        Authentication authentication, // DI(의존성 주입)
+        @AuthenticationPrincipal PrincipalDetail userDetails) {  // @AuthenticationPrincipal를 통해 session에 접근 가능
+        System.out.println("/test/login ==========");
+        PrincipalDetail principalDetail = (PrincipalDetail) authentication.getPrincipal();
+        System.out.println("authentication: " + principalDetail.getUser());
+        System.out.println("userDetails: " + userDetails.getUser());
+        return "세션 정보 확인하기";
+    }
     // localhost:8080/
     // localhost:8080
     @GetMapping({"", "/"})
@@ -24,8 +51,12 @@ public class IndexController {
         return "index";
     }
 
+    // OAuth 로그인을 해도 PrincipalDetails
+    // 일반 로그인을 해도 PrincipalDetails
+    // @AuthenticationPrincipal 어노테이션은 언제 활성화될까?
     @GetMapping("/user")
-    public String user() {
+    public String user(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        System.out.println("principalDetails: " + principalDetail.getUser());
         return "user";
     }
 
