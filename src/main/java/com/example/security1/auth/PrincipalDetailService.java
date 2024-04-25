@@ -18,6 +18,7 @@ public class PrincipalDetailService implements UserDetailsService {
 
     // security session <= Authentication <= UserDetails
     // 여기의 username은 html의 input name="username" 임
+    // 해당 함수 종료시, @AuthenticationPrincipal 어노테이션이 만들어진다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("username : " + username);
